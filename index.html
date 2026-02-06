@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liwa University AI Tutor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --navy-deep: #001f4d;
+      --navy-royal: #002b7f;
+      --off-white: #f5f7fa;
+      --cream: #fafaf5;
+      --accent: #4f46e5;
+      --accent-soft: #818cf8;
+      --text-main: #0f172a;
+      --text-muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.18);
+    }
+
+    [data-theme="dark"] {
+      --off-white: #020617;
+      --cream: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-soft: #1f2937;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e0ebff, #f5f7fa 40%, #ffffff 80%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP NAV */
+    .topbar {
+      height: 60px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, var(--navy-deep), var(--navy-royal));
+      color: #f9fafb;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #93c5fd 40%, #1d4ed8 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    .brand-title {
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-theme {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 6px 14px;
+      background: rgba(15,23,42,0.25);
+      color: #e5e7eb;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-theme span {
+      font-size: 14px;
+    }
+
+    /* LAYOUT */
+    .layout {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* DASHBOARD STAGE */
+    .dashboard {
+      flex: 1;
+      display: flex;
+      padding: 32px 32px 40px;
+      gap: 24px;
+      transition: transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.55s ease;
+      transform: translateY(0);
+      opacity: 1;
+      position: relative;
+      z-index: 5;
+    }
+
+    .dashboard.slide-down {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    .dash-main {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .dash-hero {
+      border-radius: 24px;
+      padding: 24px 24px 22px;
+      background: radial-gradient(circle at top left, #e0f2fe, #eff6ff 40%, #ffffff 80%);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dash-hero::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(59,130,246,0.18), transparent 70%);
+      top: -80px;
+      right: -40px;
+      pointer-events: none;
+    }
+
+    .hero-text-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      margin-bottom: 8px;
+    }
+
+    .hero-text-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 460px;
+      margin-bottom: 16px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .hero-badge {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(37,99,235,0.08);
+      color: #1d4ed8;
+      border: 1px solid rgba(129,140,248,0.4);
+    }
+
+    .start-btn {
+      padding: 11px 22px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--navy-royal), #4f46e5);
+      color: #f9fafb;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45);
+    }
+
+    .start-btn span {
+      font-size: 16px;
+    }
+
+    .hero-ai-card {
+      border-radius: 20px;
+      background: linear-gradient(145deg, #0f172a, #1d4ed8);
+      color: #e5e7eb;
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-ai-card::after {
+      content: "";
+      position: absolute;
+      width: 160%;
+      height: 60%;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 70%);
+      top: -40%;
+      left: -20%;
+      opacity: 0.7;
+    }
+
+    .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ai-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fef9c3, #93c5fd 40%, #1d4ed8 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 22px;
+      color: #0f172a;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.6);
+    }
+
+    .ai-meta-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .ai-meta-sub {
+      font-size: 12px;
+      opacity: 0.85;
+    }
+
+    .ai-message {
+      font-size: 13px;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ai-message strong {
+      color: #bfdbfe;
+    }
+
+    .ai-footer {
+      font-size: 11px;
+      opacity: 0.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* RIGHT PANEL (TOOLS + PROGRESS) */
+    .dash-side {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      border-radius: 18px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 12px;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--navy-deep);
+    }
+
+    .tool-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .tool-item {
+      padding: 8px 9px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tool-name {
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .tool-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .progress-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      height: 7px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #4ade80);
+    }
+
+    .progress-fill.secondary {
+      background: linear-gradient(90deg, #f97316, #fb923c);
+    }
+
+    .view-courses {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      align-self: flex-start;
+    }
+
+    .tip-card {
+      font-size: 11px;
+      color: var(--text-muted);
+      border-left: 3px solid var(--navy-royal);
+      padding-left: 8px;
+    }
+
+    .tip-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--navy-royal);
+      margin-bottom: 4px;
+    }
+
+    /* CHAT STAGE */
+    .chat-stage {
+      position: absolute;
+      inset: 0;
+      padding: 24px 32px 32px;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.55s ease;
+      z-index: 1;
+    }
+
+    .chat-stage.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .chat-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .chat-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chat-header-right {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .chat-window {
+      flex: 1;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.16);
+      padding: 16px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .message-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .message-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fef9c3, #93c5fd 40%, #1d4ed8 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      flex-shrink: 0;
+    }
+
+    .message-bubble {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .message-bubble.ai {
+      background: #f9fafb;
+      border: 1px solid var(--border-soft);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-bubble.user {
+      background: linear-gradient(135deg, var(--navy-royal), #4f46e5);
+      color: #f9fafb;
+      border-bottom-right-radius: 4px;
+    }
+
+    .typing-indicator {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: none;
+    }
+
+    .typing-indicator span {
+      display: inline-block;
+      animation: blink 1.2s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 20% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+
+    .suggest-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .suggest-chip {
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #f9fafb;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .suggest-chip:hover {
+      background: #e5edff;
+      border-color: #2563eb;
+    }
+
+    .input-area {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .drop-zone {
+      border-radius: 12px;
+      border: 1px dashed var(--border-soft);
+      padding: 8px 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--cream);
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+	.ai-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 10px 25px rgba(15,23,42,0.25);
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+    .drop-zone.dragover {
+      border-color: #2563eb;
+      background: #e5edff;
+      color: #1d4ed8;
+    }
+
+    .input-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-shell {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 6px 10px;
+      background: #f9fafb;
+    }
+
+    .input-shell input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .icon-btn:hover {
+      background: rgba(15,23,42,0.05);
+    }
+
+    .send-btn {
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--navy-royal), #4f46e5);
+      color: #f9fafb;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(37,99,235,0.4);
+    }
+
+    /* FOOTER */
+    .footer {
+      padding: 10px 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-soft);
+      background: rgba(255,255,255,0.9);
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .footer strong {
+      color: var(--navy-deep);
+    }
+
+    @media (max-width: 900px) {
+      .dashboard {
+        flex-direction: column;
+        padding: 20px 16px 28px;
+      }
+      .dash-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .chat-stage {
+        padding: 18px 12px 24px;
+      }
+      .chat-shell {
+        max-width: 100%;
+      }
+      .message-bubble {
+        max-width: 80%;
+      }
+    }
+		[data-theme="dark"] body {
+  background: radial-gradient(circle at top left, #020617, #020617 40%, #020617 80%);
+}
+
+[data-theme="dark"] .dash-hero {
+  background: radial-gradient(circle at top left, #020617, #020617 40%, #020617 80%);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .chat-window,
+[data-theme="dark"] .input-shell,
+[data-theme="dark"] .drop-zone {
+  background: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .message-bubble.ai {
+  background: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .message-bubble.user {
+  background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+}
+
+[data-theme="dark"] .footer {
+  background: #020617;
+  border-top-color: #1f2937;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .hero-text-title,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .chat-title {
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .hero-text-sub,
+[data-theme="dark"] .tool-desc,
+[data-theme="dark"] .chat-sub {
+  color: #9ca3af;
+}
+
+	.home-btn {
+  margin-right: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: #f9fafb;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.home-btn:hover {
+  background: #e5edff;
+  border-color: #2563eb;
+}
+
+[data-theme="dark"] .home-btn {
+  background: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .home-btn:hover {
+  background: #111827;
+  border-color: #2563eb;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.recent-item {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+}
+
+.recent-item:hover {
+  background: #e5edff;
+  border-color: #2563eb;
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.quick-btn {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: #f9fafb;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.quick-btn:hover {
+  background: #e5edff;
+  border-color: #2563eb;
+}
+
+[data-theme="dark"] .recent-item,
+[data-theme="dark"] .quick-btn {
+  background: #020617;
+  border-color: #1f2937;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .recent-item:hover,
+[data-theme="dark"] .quick-btn:hover {
+  background: #111827;
+  border-color: #2563eb;
+}
+  </style>
+</head>
+<body data-theme="light">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand-mark">L</div>
+      <div class="brand-title">EduAI</div>
+    </div>
+    <div class="topbar-right">
+      <button class="toggle-theme" id="themeToggle">
+        <span>☀</span> <span id="themeLabel">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- DASHBOARD STAGE -->
+    <section class="dashboard" id="dashboard">
+      <div class="dash-main">
+        <div class="dash-hero">
+		<!-- Recent Questions + Quick Start -->
+<div style="display: flex; flex-direction: column; gap: 14px; margin-top: 12px;">
+  <!-- Recent Questions -->
+  <div class="card">
+    <div class="card-title">Recent Questions</div>
+    <div class="recent-list">
+      <div class="recent-item">Explain pointers in C++ with simple examples</div>
+      <div class="recent-item">Summarize this Python algorithm for me</div>
+      <div class="recent-item">Help me plan my study week</div>
+      <div class="recent-item">Review this paragraph for my term paper</div>
+    </div>
+  </div>
+
+  <!-- Quick Start -->
+  <div class="card">
+    <div class="card-title">Quick Start</div>
+    <div class="quick-actions">
+      <button class="quick-btn" onclick="userInput.value='Start a new session'; sendMessage('Start a new session')">Start a new session</button>
+      <button class="quick-btn" onclick="uploadBtn.click()">Upload a file</button>
+      <button class="quick-btn" onclick="userInput.focus()">Ask a question</button>
+      <button class="quick-btn" onclick="alert('Study tools are listed on the right panel.')">View study tools</button>
+    </div>
+  </div>
+</div>
+          <div>
+            <div class="hero-text-title">Hello, Deya. Let’s make studying easier.</div>
+            <div class="hero-text-sub">
+              Im EduAI!, Your Personal Programming & IT tutor. From C++ pointers to Python algorithms and CS theory,
+              I’ll walk with you step by step.
+            </div>
+            <div class="hero-badges">
+              <div class="hero-badge">Programming & IT Specialist</div>
+              <div class="hero-badge">Exam Prep & Study Planning</div>
+              <div class="hero-badge">Academic Writing & Research</div>
+            </div>
+            <button class="start-btn" id="startBtn">
+              Start Learning <span>➜</span>
+            </button>
+          </div>
+          <div class="hero-ai-card">
+            <div class="ai-header">
+              
+			  <img src=""C:\Users\DeyaE\Downloads\EduAI.png"" alt="AI Avatar" />
+
+              <div>
+                <div class="ai-meta-title">EduAI</div>
+                <div class="ai-meta-sub">Liwa University · Programming & IT</div>
+              </div>
+            </div>
+            <div class="ai-message">
+              “Hello, ! Whether you’re debugging C++ pointers, exploring Python algorithms, or
+              revising theory, I’m here to guide you.  
+              Tell me what you’re working on today.”
+            </div>
+            <div class="ai-footer">
+              Tip: You can paste code, questions, or even assignment prompts—I’ll adapt to your level.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="dash-side">
+        <div class="card">
+          <div class="card-title">Study Tools</div>
+          <div class="tool-list">
+            <div class="tool-item">
+              <div class="tool-name">Summary Master</div>
+              <div class="tool-desc">Quickly summarize long lectures, PDFs, or notes into key points.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name">Concept Cracker</div>
+              <div class="tool-desc">Break down complex theories into simple, step‑by‑step explanations.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name">Study Planner</div>
+              <div class="tool-desc">Build a realistic study plan for your exams and projects.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name">Citation Helper</div>
+              <div class="tool-desc">Generate APA/MLA citations and structure your references properly.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Today’s Progress</div>
+          <div class="progress-list">
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Exam Prep · Intro to Python</span>
+                <span>75%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%;"></div>
+              </div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Term Paper Draft</span>
+                <span>30%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill secondary" style="width: 30%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="view-courses">View all courses</div>
+        </div>
+
+        <div class="card">
+          <div class="tip-card">
+            <div class="tip-label">EduAI’s Tip</div>
+            “Education is the passport to the future. Let’s make every study session count, scholar.”
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- CHAT STAGE -->
+    <section class="chat-stage" id="chatStage">
+      <div class="chat-shell">
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <div class="ai-avatar" style="width:40px;height:40px;font-size:18px;">AI</div>
+            <div>
+              <div class="chat-title">EduAI</div>
+              <div class="chat-sub">Ask about code, theory, exams, or projects—one question at a time.</div>
+            </div>
+          </div>
+          <div class="chat-header-right">
+			<button class="home-btn" id="homeBtn">Home</button>
+			<span>Powered by Airia · Live academic assistant</span>
+			</div>
+        </div>
+
+        <div class="chat-window" id="chatWindow"></div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          Liwa AI is typing <span>•</span><span>•</span><span>•</span>
+        </div>
+
+        <div class="suggest-row" id="suggestRow">
+          <div class="suggest-chip" data-prompt="Explain pointers in C++ with simple examples.">
+            Explain C++ pointers
+          </div>
+          <div class="suggest-chip" data-prompt="Help me understand time complexity of this Python algorithm:">
+            Analyze a Python algorithm
+          </div>
+          <div class="suggest-chip" data-prompt="Create a study plan for my upcoming programming exam.">
+            Build a study plan
+          </div>
+          <div class="suggest-chip" data-prompt="Review and improve this paragraph for my term paper:">
+            Improve my writing
+          </div>
+        </div>
+
+        <div class="input-area">
+          <div class="drop-zone" id="dropZone">
+            Drag & drop files here (PDFs, docs, code) to reference them in your question.
+          </div>
+
+          <div class="input-bar">
+            <div class="input-shell">
+              <button class="icon-btn" id="uploadBtn" title="Upload file">📎</button>
+              <input type="file" id="fileInput" style="display:none" />
+              <input id="userInput" type="text" placeholder="Ask anything about programming, IT, or your courses..." />
+              <button class="icon-btn" id="micBtn" title="Voice input">🎤</button>
+            </div>
+            <button class="send-btn" id="sendBtn">Send</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span><strong>EduAI</strong> © 2026</span>
+    <span>Powered by Airia</span>
+  </footer>
+
+  <script>
+    const dashboard = document.getElementById("dashboard");
+    const chatStage = document.getElementById("chatStage");
+    const startBtn = document.getElementById("startBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    const themeLabel = document.getElementById("themeLabel");
+    const chatWindow = document.getElementById("chatWindow");
+    const typingIndicator = document.getElementById("typingIndicator");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const micBtn = document.getElementById("micBtn");
+	const homeBtn = document.getElementById("homeBtn");
+    let isDark = false;
+
+    // Transition: dashboard -> chat (smooth slide down)
+    startBtn.addEventListener("click", () => {
+      dashboard.classList.add("slide-down");
+      chatStage.classList.add("active");
+    });
+		
+		document.querySelectorAll(".recent-item").forEach(item => {
+		item.addEventListener("click", () => {
+		const text = item.textContent;
+		userInput.value = text;
+		sendMessage(text);
+	});
+	});
+
+	homeBtn.addEventListener("click", () => {
+  // Reset to dashboard view
+  dashboard.classList.remove("slide-down");
+  chatStage.classList.remove("active");
+  // Optional: scroll to top of dashboard
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+    // Theme toggle
+    themeToggle.addEventListener("click", () => {
+      isDark = !isDark;
+      document.body.setAttribute("data-theme", isDark ? "dark" : "light");
+      themeLabel.textContent = isDark ? "Dark" : "Light";
+      themeToggle.firstElementChild.textContent = isDark ? "🌙" : "☀";
+    });
+
+    function addMessage(text, sender) {
+      const row = document.createElement("div");
+      row.className = "message-row " + sender;
+
+      if (sender === "ai") {
+        const avatar = document.createElement("div");
+        avatar.className = "message-avatar";
+        avatar.textContent = "AI";
+        row.appendChild(avatar);
+      }
+
+      const bubble = document.createElement("div");
+      bubble.className = "message-bubble " + sender;
+      bubble.textContent = text;
+      row.appendChild(bubble);
+
+      chatWindow.appendChild(row);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    async function sendMessage(text) {
+      if (!text) return;
+      addMessage(text, "user");
+      userInput.value = "";
+      typingIndicator.style.display = "block";
+
+      try {
+        const res = await fetch("http://localhost:4000/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+        typingIndicator.style.display = "none";
+        addMessage(data.reply || "No response from AI.", "ai");
+      } catch (err) {
+        typingIndicator.style.display = "none";
+        addMessage("There was an error contacting the server.", "ai");
+      }
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const text = userInput.value.trim();
+      sendMessage(text);
+    });
+
+    userInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        const text = userInput.value.trim();
+        sendMessage(text);
+      }
+    });
+
+    // Suggested prompts
+    document.querySelectorAll(".suggest-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const prompt = chip.getAttribute("data-prompt");
+        userInput.value = prompt;
+        sendMessage(prompt);
+      });
+    });
+
+    // Drag & drop
+    ["dragenter", "dragover"].forEach(evt => {
+      dropZone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach(evt => {
+      dropZone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove("dragover");
+      });
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const file = files[0];
+        addMessage("File detected: " + file.name + ". You can now reference it in your question.", "ai");
+      }
+    });
+
+    // Upload button
+    uploadBtn.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        addMessage("Uploaded file: " + file.name + ". You can now reference it in your question.", "ai");
+      }
+    });
+
+    // Voice placeholder
+    micBtn.addEventListener("click", () => {
+      alert("Voice input placeholder – you can connect Web Speech API here later.");
+    });
+  </script>
+</body>
+</html>
