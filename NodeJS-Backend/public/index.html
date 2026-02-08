@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EduAIr</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Markdown Renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body data-theme="light">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand-mark">E</div>
+      <div class="brand-title">EduAI</div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="toggle-theme" id="themeToggle">
+        <span>☀</span> <span id="themeLabel">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- DASHBOARD STAGE -->
+    <section class="dashboard" id="dashboard">
+
+      <div class="dash-main">
+        <div class="dash-hero">
+
+          <!-- Recent Questions + Quick Start -->
+          
+			<div>
+            <div class="hero-text-title">Hello, Deya. Let’s make studying easier.</div>
+            <div class="hero-text-sub">
+              I'm EduAI — your personal Programming & IT tutor. From C++ pointers to Python algorithms and CS theory,
+              I’ll walk with you step by step.
+            </div>
+
+            <div class="hero-badges">
+              <div class="hero-badge">Programming & IT Specialist</div>
+              <div class="hero-badge">Exam Prep & Study Planning</div>
+              <div class="hero-badge">Academic Writing & Research</div>
+            </div>
+
+            <button class="start-btn" id="startBtn">
+              Start Learning <span>➜</span>
+            </button>
+          </div>
+
+          <!-- AI Card -->
+          <div class="hero-ai-card">
+            <div class="ai-header">
+
+              <!-- FIXED: Corrected broken image tag -->
+              <div class="ai-avatar">
+                <img src="C:/Users/DeyaE/Downloads/EduAI.png" alt="AI Avatar">
+              </div>
+
+              <div>
+                <div class="ai-meta-title">EduAI</div>
+                <div class="ai-meta-sub">Liwa University · Programming & IT</div>
+              </div>
+            </div>
+
+            <div class="ai-message">
+              “Hello! Whether you’re debugging C++ pointers, exploring Python algorithms, or revising theory,
+              I’m here to guide you. Tell me what you’re working on today.”
+            </div>
+
+            <div class="ai-footer">
+              Tip: You can paste code, questions, or assignment prompts — I’ll adapt to your level.
+            </div>
+          </div>
+            <!-- Recent Questions -->
+            <div class="card">
+              <div class="card-title">Recent Questions</div>
+              <div class="recent-list">
+                <div class="recent-item">Explain pointers in C++ with simple examples</div>
+                <div class="recent-item">Summarize this Python algorithm for me</div>
+                <div class="recent-item">Help me plan my study week</div>
+                <div class="recent-item">Review this paragraph for my term paper</div>
+              </div>
+            </div>
+			
+			
+			
+			
+            <!-- Quick Start -->
+            <div class="card">
+              <div class="card-title">Quick Start</div>
+              <div class="quick-actions">
+                <button class="quick-btn" onclick="userInput.value='Start a new session'; sendMessage('Start a new session')">Start a new session</button>
+                <button class="quick-btn" onclick="uploadBtn.click()">Upload a file</button>
+                <button class="quick-btn" onclick="userInput.focus()">Ask a question</button>
+                <button class="quick-btn" onclick="alert('Study tools are listed on the right panel.')">View study tools</button>
+              </div>
+            </div>
+			
+			<div class="card">
+          <div class="card-title">Study Tools</div>
+          <div class="tool-list">
+            <div class="tool-item">
+              <div class="tool-name">Summary Master</div>
+              <div class="tool-desc">Summarize lectures, PDFs, or notes into key points.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name">Concept Cracker</div>
+              <div class="tool-desc">Break down complex theories into simple explanations.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name">Study Planner</div>
+              <div class="tool-desc">Build a realistic study plan for exams and projects.</div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-name">Citation Helper</div>
+              <div class="tool-desc">Generate APA/MLA citations and structure references.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Today’s Progress</div>
+          <div class="progress-list">
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Exam Prep · Intro to Python</span>
+                <span>75%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%;"></div>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Term Paper Draft</span>
+                <span>30%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill secondary" style="width: 30%;"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="view-courses">View all courses</div>
+        </div>
+
+        <div class="card">
+          <div class="tip-card">
+            <div class="tip-label">EduAI’s Tip</div>
+            “Education is the passport to the future. Let’s make every study session count.”
+          </div>
+        </div>
+		
+		
+		
+
+          </div>
+
+          <!-- Hero Text -->
+          
+
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <aside class="dash-side">
+
+>       <div class="feedback-card">
+		<div class="feedback-title">Feedback Summary</div>
+
+			<div class="feedback-card" style="background:#fff;border-radius:12px;box-shadow:0 18px 45px rgba(15,23,42,0.18);padding:24px;margin-top:20px;display:flex;flex-direction:column;align-items:center;">
+  <div class="feedback-title" style="font-size:18px;font-weight:600;margin-bottom:12px;color:#0f172a;">Most Learned languages</div>
+  <canvas id="feedbackChart" style="width:100%;max-width:280px;height:auto;"></canvas>
+</div>
+
+		<canvas id="feedbackChart"></canvas>
+		
+		<div class="feedback-progress">
+  <div class="feedback-progress-title">Overall Progress</div>
+
+  <div class="progress-item">
+    <span>Python</span>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 23%;"></div>
+    </div>
+  </div>
+
+  <div class="progress-item">
+    <span>C++</span>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 12%;"></div>
+    </div>
+  </div>
+
+  <div class="progress-item">
+    <span>Java</span>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 18%;"></div>
+    </div>
+  </div>
+
+  <div class="progress-item">
+    <span>JavaScript</span>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 17%;"></div>
+    </div>
+  </div>
+		</div>
+		
+		
+      </aside>
+
+    </section>
+
+    <!-- WORKSPACE: Chat + Compiler -->
+    <div class="workspace">
+
+      <!-- CHAT STAGE -->
+      <section class="chat-stage" id="chatStage">
+        <div class="chat-shell">
+
+          <div class="chat-header">
+            <div class="chat-header-left">
+              <div class="ai-avatar" style="width:40px;height:40px;font-size:18px;">AI</div>
+              <div>
+                <div class="chat-title">EduAI</div>
+                <div class="chat-sub">Ask about code, theory, exams, or projects one question at a time!</div>
+              </div>
+            </div>
+
+            <div class="chat-header-right">
+              <button class="home-btn" id="homeBtn">Home</button>
+              <span>Powered by Airia · Live academic assistant</span>
+            </div>
+          </div>
+
+          <div class="chat-window" id="chatWindow"></div>
+
+          <div class="typing-indicator" id="typingIndicator">
+            EduAI is typing <span>•</span><span>•</span><span>•</span>
+          </div>
+
+          <div class="suggest-row" id="suggestRow">
+            <div class="suggest-chip" data-prompt="Explain pointers in C++ with simple examples.">Explain C++ pointers</div>
+            <div class="suggest-chip" data-prompt="What's The Difference Between Python and C Language">Explain The Difference Between Python and C</div>
+            <div class="suggest-chip" data-prompt="Explain and Clarify what Python Libraries Are">Explain Python Libraries</div>
+            <div class="suggest-chip" data-prompt="How can I Make My Code More Readable?">Improve my code clarity skills</div>
+          </div>
+
+          <div class="input-area">
+
+            <!--<div class="drop-zone" id="dropZone">
+              Drag & drop files here (PDFs, docs, code) to reference them in your question.
+            </div>--!>
+
+            <div class="input-bar">
+              <div class="input-shell">
+                <button class="icon-btn" id="uploadBtn" title="Upload file">U</button>
+                <input type="file" id="fileInput" style="display:none" />
+                <input id="userInput" type="text" placeholder="Ask anything about programming, IT, or your courses..." />
+                <!--<button class="icon-btn" id="micBtn" title="Voice input">🎤</button>--!>
+              </div>
+
+              <button class="send-btn" id="sendBtn">Send</button>
+            </div>
+			<section class="compiler-panel" id="compilerPanel">
+  <div class="compiler-header">
+    <button id="collapseCompilerBtn">Hide</button>
+  </div>
+  <div class="restore-compiler" id="restoreCompilerBtn" style="display: none;">
+  <button>Show</button>
+</div>
+ <iframe 
+    src="https://embeddable-code-runner--DeyaLU.replit.app"
+    frameborder="0"
+    width="100%"
+    height="100%"
+    style="border-radius: 12px; background: navy-royal;">
+  </iframe>
+</section>
+          </div>
+
+        </div>
+      </section>
+
+      
+      
+</div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <span><strong>EduAI</strong> © 2026</span>
+    <span>Powered by Airia</span>
+  </footer>
+
+  <!-- External JS -->
+  <script src="app.js"></script>
+
+</body>
+</html>
