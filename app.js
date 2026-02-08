@@ -19,7 +19,7 @@ const collapseBtn = document.getElementById("collapseCompilerBtn");
 const restoreBtn = document.getElementById("restoreCompilerBtn");
 const compilerPanel = document.getElementById("compilerPanel");
 const workspace = document.querySelector(".workspace");
-
+const feedback = document.getElementById("feedback-card");
 let isDark = false;
 
 
@@ -35,11 +35,53 @@ const confirmations = [
 ];
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("feedbackChart");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  const data = [23, 12, 18, 17, 15, 15];
+  const labels = ["Python", "C++", "Java", "JavaScript", "SQL", "C#"];
+  const colors = ["#4f46e5", "#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe", "#e0e7ff"];
+
+  new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: context => `${context.label}: ${context.parsed}%`
+          }
+        }
+      },
+      animation: { animateScale: true }
+    }
+  });
+});
+
+// Hide chart when Start Learning is clicked
+document.getElementById("startBtn").addEventListener("click", () => {
+  const feedbackCard = document.querySelector(".feedback-card");
+  if (feedbackCard) feedbackCard.style.display = "none";
+});
+
+
 // ======================================================
 // UI TRANSITIONS
 // ======================================================
 startBtn.addEventListener("click", () => {
   dashboard.classList.add("slide-down");
+  //feedback.classList.add("active");
   chatStage.classList.add("active");
   document.getElementById("compilerContainer").style.display = "flex";
 });
@@ -59,10 +101,11 @@ restoreBtn.addEventListener("click", () => {
 
 homeBtn.addEventListener("click", () => {
   dashboard.classList.remove("slide-down");
+  //feedback.classList.remove("slide-down");
   chatStage.classList.remove("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
-
+		
 document.getElementById("collapseCompilerBtn").addEventListener("click", () => {
   document.getElementById("compilerPanel").classList.toggle("collapsed");
 });
